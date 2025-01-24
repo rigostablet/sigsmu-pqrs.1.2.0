@@ -1,0 +1,23 @@
+services:
+  app_pqrs:
+    image: app_pqrs:latest
+    container_name: app_pqrs
+    build:
+      context: ./      
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./storage:/app/storage
+      
+    expose:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=sigsmu-pqrs.site
+      # - LETSENCRYPT_HOST=sigsmu-pqrs.site
+      # - LETSENCRYPT_EMAIL=oripoll24@gmail.com
+    networks:
+      - network_mi_red
+
+networks:
+  network_mi_red:
+    external: true
