@@ -33,7 +33,7 @@ e.g $arrDataFromDb = $comp_model->fetchData(); //function name
                         </div>
                         <div class="col">
                             <div class="flex-column justify-content align-center">
-                                <div class="title">SIN ASIGNAR</div>
+                                <div class="title">Sin Asignar</div>
                                 <small class="">PQRS ingresadas y sin asignar</small>
                             </div>
                             <h2 class="text-light value"><?php echo $rec_count; ?></h2>
@@ -50,7 +50,7 @@ e.g $arrDataFromDb = $comp_model->fetchData(); //function name
                     </div>
                     <div class="col">
                         <div class="flex-column justify-content align-center">
-                            <div class="title">SIN RESPUESTAS</div>
+                            <div class="title">Sin Respuestas</div>
                             <small class="">PQRS asignadas sin respuesta</small>
                         </div>
                         <h2 class="text-light value"><?php echo $rec_count; ?></h2>
@@ -67,8 +67,8 @@ e.g $arrDataFromDb = $comp_model->fetchData(); //function name
                 </div>
                 <div class="col">
                     <div class="flex-column justify-content align-center">
-                        <div class="title">RESPONDIDAS</div>
-                        <small class="">Respuestas realizadas...</small>
+                        <div class="title">Respondidas</div>
+                        <small class=""> PQRS con respuestas realizadas...</small>
                     </div>
                     <h2 class="value text-light"><?php echo $rec_count; ?></h2>
                 </div>
