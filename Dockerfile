@@ -9,12 +9,14 @@ COPY . .
 RUN git config --global --add safe.directory /app
 RUN composer install --no-interaction -o --no-dev
 
+USER application
 RUN php artisan optimize
 RUN php artisan storage:link
 
 # Limpiar cachés y permisos
-RUN chmod -R 777 /app/storage
-RUN chmod -R 777 /app/bootstrap/cache
+RUN chmod -R 775 /app/storage
+RUN chown -R application:application /app/storage /app/bootstrap/cache
+RUN chmod -R 775 /app/storage /app/bootstrap/cache
 
 # -------------------------
 # --- Sección para Vite ---
