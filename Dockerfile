@@ -3,20 +3,18 @@ ENV WEB_DOCUMENT_ROOT=/app/public
 ENV PHP_DISMOD=bz2,calendar,exiif,ffi,intl,gettext,ldap,mysqli,imap,pdo_pgsql,pgsql,soap,sockets,sysvmsg,sysvsm,sysvshm,shmop,xsl,zip,apcu,vips,yaml,imagick,mongodb,amqp
 WORKDIR /app
 
-COPY composer.json ./
-COPY composer.lock ./
 COPY . .
-RUN git config --global --add safe.directory /app
 RUN composer install --no-interaction -o --no-dev
 
-USER application
+# Configuración de Git
+RUN git config --global --add safe.directory /app
+
 RUN php artisan optimize
 RUN php artisan storage:link
 
 # Limpiar cachés y permisos
 RUN chmod -R 775 /app/storage
-RUN chown -R application:application /app/storage /app/bootstrap/cache
-RUN chmod -R 775 /app/storage /app/bootstrap/cache
+RUN chmod -R 775 /app/bootstrap/cache
 
 # -------------------------
 # --- Sección para Vite ---

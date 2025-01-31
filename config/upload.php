@@ -1,7 +1,6 @@
-
-<?php 
+<?php
 	return [
-		"tempDir" => "uploads/temp/", 
+		"tempDir" => "uploads/temp/",
 		"import" => [
 			"file_name_type" => "timestamp",
 			"extensions" => "json,csv",
@@ -20,7 +19,7 @@
 			"filename_prefix" => "",
 			"upload_dir" => "uploads/photos/"
 		],
-		
+
 		"regsol_photo" => [
 			"file_name_type" => "original",
 			"extensions" => "jpg,png,gif,jpeg,pdf",
@@ -29,9 +28,9 @@
 			"return_full_path" => false,
 			"filename_prefix" => "",
 			"upload_dir" => "uploads/files",
-			"image_resize" => [ 
-				"small" => ["width" => 100, "height" => 100, "mode" => "cover"], 
-				"medium" => ["width" => 480, "height" => 480, "mode" => "contain"], 
+			"image_resize" => [
+				"small" => ["width" => 100, "height" => 100, "mode" => "cover"],
+				"medium" => ["width" => 480, "height" => 480, "mode" => "contain"],
 				"large" => ["width" => 1024, "height" => 760, "mode" => "contain"]
 			],
 
@@ -45,9 +44,9 @@
 			"return_full_path" => false,
 			"filename_prefix" => "",
 			"upload_dir" => "uploads/files",
-			"image_resize" => [ 
-				"small" => ["width" => 100, "height" => 100, "mode" => "cover"], 
-				"medium" => ["width" => 480, "height" => 480, "mode" => "contain"], 
+			"image_resize" => [
+				"small" => ["width" => 100, "height" => 100, "mode" => "cover"],
+				"medium" => ["width" => 480, "height" => 480, "mode" => "contain"],
 				"large" => ["width" => 1024, "height" => 760, "mode" => "contain"]
 			],
 
@@ -61,9 +60,9 @@
 			"return_full_path" => false,
 			"filename_prefix" => "",
 			"upload_dir" => "uploads/files",
-			"image_resize" => [ 
-				"small" => ["width" => 100, "height" => 100, "mode" => "cover"], 
-				"medium" => ["width" => 480, "height" => 480, "mode" => "contain"], 
+			"image_resize" => [
+				"small" => ["width" => 100, "height" => 100, "mode" => "cover"],
+				"medium" => ["width" => 480, "height" => 480, "mode" => "contain"],
 				"large" => ["width" => 1024, "height" => 760, "mode" => "contain"]
 			],
 

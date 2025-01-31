@@ -13,6 +13,7 @@ services:
       - "80"
     environment:
       - VIRTUAL_HOST=sigsmu-pqrs.site
+      #   - HTTPS_METHOD=noredirect
       - LETSENCRYPT_HOST=sigsmu-pqrs.site
       - LETSENCRYPT_EMAIL=oripoll24@gmail.com
     networks:
