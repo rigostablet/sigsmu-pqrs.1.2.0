@@ -155,9 +155,10 @@ e.g $arrDataFromDb = $comp_model->fetchData(); //function name
                                                 </td>
                                                 <!-- Se modifico el codigo a continuacion de la imagen para que abra en una pagina nueva -->
                                                 <?php
-                                                $imageSrc = 'http://sigsmu-pqrs.1.2.0.net/uploads/files/' . basename($data['regsol_photo']);
-                                                $defaultImage = 'http://sigsmu-pqrs.1.2.0.net/uploads/files/default.png';
-                                                $pdfPreview = 'http://sigsmu-pqrs.1.2.0.net/uploads/files/pdf-preview.png';
+						$baseUrl = url('/uploads/files/');	
+                                                $imageSrc = $baseUrl . '/' . basename($data['regsol_photo']);
+                                                $defaultImage = $baseUrl.'/default.png';
+                                                $pdfPreview =$baseUrl .'/pdf-preview.png';
 
                                                 // Verifica si el archivo es un PDF y ajusta la imagen de vista previa en consecuencia
                                                 $fileExtension = pathinfo($data['regsol_photo'], PATHINFO_EXTENSION);

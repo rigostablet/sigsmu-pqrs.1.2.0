@@ -174,9 +174,9 @@ $pageTitle = 'listado pqrs'; //set dynamic page title
                                         -->
                                                 <!-- Se modifico el codigo a continuacion de la imagen para que abra en una pagina nueva -->
                                                 <?php
-                                                $imageSrc = 'http://sigsmu-pqrs.1.2.0.net/uploads/files/' . basename($data['regsol_photo']);
-                                                $defaultImage = 'http://sigsmu-pqrs.1.2.0.net/uploads/files/default.png';
-                                                $pdfPreview = 'http://sigsmu-pqrs.1.2.0.net/uploads/files/pdf-preview.png';
+                                                $imageSrc = 'https://sigsmu-pqrs.site/uploads/files/' . basename($data['regsol_photo']);
+                                                $defaultImage = 'https://sigsmu-pqrs.site/uploads/files/default.png';
+                                                $pdfPreview = 'https://sigsmu-pqrs.site/uploads/files/pdf-preview.png';
 
                                                 // Verifica si el archivo es un PDF y ajusta la imagen de vista previa en consecuencia
                                                 $fileExtension = pathinfo($data['regsol_photo'], PATHINFO_EXTENSION);

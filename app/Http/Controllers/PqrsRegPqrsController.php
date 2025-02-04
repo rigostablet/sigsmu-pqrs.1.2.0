@@ -391,13 +391,15 @@ class PqrsRegPqrsController extends Controller
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
 	private function ExportListPqrsTotalCont($query){
-		ob_end_clean(); // clean any output to allow file download
+	ob_start();	
+	ob_end_clean(); // clean any output to allow file download
 		$filename = "ListPqrsTotal_Report-" . date_now(); // nombre con sale el archivo descargado
 		$format = $this->getExportFormat();
 		if($format == "print"){
 			$records = $query->get(PqrsRegPqrs::exportListPqrsTotalContFields());
 			return Excel::download(new PqrsregpqrsListPqrsTotalContExport($query), "$filename.xlsx", \Maatwebsite\Excel\Excel::XLSX);
 		}
-		
+	
 	}
+	
 }

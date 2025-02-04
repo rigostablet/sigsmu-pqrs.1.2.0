@@ -55,8 +55,8 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost:8050'),
-	'frontend_url' => env('FRONTEND_URL', 'http://localhost:8050'),
+    'url' => env('APP_URL', 'https://sigsmu-pqrs.site'),
+	'frontend_url' => env('FRONTEND_URL', 'https://sigsmu-pqrs.site'),
     'asset_url' => env('ASSET_URL'),
 
     /*

@@ -253,4 +253,5 @@ $pageTitle = 'asignar pqrs'; //set dynamic page title
         });
 
     </script>
+
 @endsection

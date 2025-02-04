@@ -5,7 +5,7 @@ use App\Http\Requests\PqrsAsigAddRequest;
 use App\Http\Requests\PqrsAsigEditRequest;
 use App\Models\PqrsAsig;
 use App\Models\User;
-use App\Models\Pqrsregpqrs;
+use App\Models\PqrsRegPqrs;
 use Illuminate\Mail\Mailable; //Agregado nuevo
 use Illuminate\Support\Facades\Mail; //clase que maneja el mail
 use App\Mail\Mailpqrs; //agregar la clase que se creo para el envio de lso emails
@@ -109,7 +109,7 @@ class PqrsAsigController extends Controller
     function afterEdit($rec_id,$record){
         //conexion a datos base "Pqrsregpqrs" 
 		$queryreg = PqrsRegPqrs::query(); //se conecta a la tabla Pqrsregpqrs para poder llamar los campos
-        $recordreg = $queryreg->findOrFail($rec_id, Pqrsregpqrs::editFields()); //se obtienen y se almacenan los registros de la tabla
+        $recordreg = $queryreg->findOrFail($rec_id, PqrsRegPqrs::editFields()); //se obtienen y se almacenan los registros de la tabla
         //conexion a datos base "PqrsAsig" 
 		$query_asig = PqrsAsig::query(); //se conecta a la tabla Pqrsregpqrs para poder llamar los campos
         $recor_asig = $query_asig->findOrFail($rec_id, PqrsAsig::editFields()); //se obtienen y se almacenan los registros de la tabla
