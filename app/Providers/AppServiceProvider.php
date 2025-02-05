@@ -22,11 +22,6 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->composer('*', function ($view)
         {
-
-            if (config('app.env') !== 'local') {
-                URL::forceScheme('https');
-            }
-
 			$user = request()->user();
 			$view->with('user', $user);
 
