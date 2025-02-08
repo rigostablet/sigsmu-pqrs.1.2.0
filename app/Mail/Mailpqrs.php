@@ -27,7 +27,7 @@ class Mailpqrs extends Mailable
     public $pet;
     public $ofic;
     public $obs;
-    public function __construct($correo,$photoreg,$respo,$radicado,$noment,$fecresp,$nompet,$diaspen,$fecsol,$ofic_act,$obser)
+    public function __construct($correo,$photoreg,$respo,$radicado,$noment,$fecresp,$nompet,$diaspen,$fecsol,$ofic_act,$obs_asig)
     {
         $this->cor=$correo; // se recibe el nombre del afiliado en otra variable.
         $this->phot=$photoreg;
@@ -39,10 +39,8 @@ class Mailpqrs extends Mailable
         $this->dias=$diaspen;
         $this->fecrad=$fecsol;
         $this->ofic=$ofic_act;
-        $this->obs= $obser;
-        
-        
-        //$this->nom=$nomrespon;
+        $this->obs= $obs_asig;
+    
     }
 
     /**

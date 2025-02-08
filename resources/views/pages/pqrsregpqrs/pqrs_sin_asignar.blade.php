@@ -314,6 +314,5 @@ e.g $arrDataFromDb = $comp_model->fetchData(); //function name
 $(document).ready(function(){
 	// custom javascript | jquery codes
 });
-
 </script>
 @endsection

@@ -10,6 +10,11 @@ use Illuminate\Mail\Mailable; //Agregado nuevo
 use Illuminate\Support\Facades\Mail; //clase que maneja el mail
 use App\Mail\Mailpqrs; //agregar la clase que se creo para el envio de lso emails
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\Mailer\Exception\TransportException;
+use Swift_SmtpTransport;
 use Exception;
 class PqrsAsigController extends Controller
 {
@@ -76,58 +81,69 @@ class PqrsAsigController extends Controller
 		//save PqrsAsig record
 		$record = PqrsAsig::create($modeldata);
 		$rec_id = $record->id_asig;
-		return $this->redirect("pqrsasig", "Grabar agregado exitosamente");
+		return $this->redirect("pqrsasig", "agregado exitosamente");
 	}
-	
-
 	/**
-     * Update table record with form data
-	 * @param string $rec_id //select record by table primary key
-     * @return \Illuminate\View\View;
-     */
+	 * CODIGO QUE ENVIA CORREO Y SI SE ENVIO EFECTIVAMENTE ACTUALIZA LA TABLA
+	 */
+	//Nuevo codigo
 	function edit(PqrsAsigEditRequest $request, $rec_id = null){
-		$query = PqrsAsig::query();
-		$record = $query->findOrFail($rec_id, PqrsAsig::editFields());
+		$query = PqrsAsig::query(); // hacemos consulta con la tabla
+		$record = $query->findOrFail($rec_id, PqrsAsig::editFields());//recorremos los registro y los guardamos en $record 
 		if ($request->isMethod('post')) {
-			$modeldata = $this->normalizeFormData($request->validated());
-			$record->update($modeldata);
-			$this->afterEdit($rec_id, $record);
-			$obser= $record->id_rad_asig;
-			$cor=$record->email_asig;
-			$rad= $record->id_rad_asig;
-			$obser= $record->observacion;
-			return $this->redirect("pqrsasig", "" .$rad. " notificada con exito!!!");
-			
+			$envioExitoso = $this->envioEmail($rec_id, $record); //instanciamos a la funcion envioEmail
+			if ($envioExitoso) {
+				$modeldata = $this->normalizeFormData($request->validated());
+				$record->update($modeldata);
+				// Actualizar el campo "regsol_est" en la tabla "pqrsregpqrs"
+				$pqrsRegRecord = PqrsRegPqrs::findOrFail($rec_id); //instanciamos la tabla PqrsRegPqrs
+				$pqrsRegRecord->regsol_est = 'ASIGNADO'; // Cambiamos el valor del campo
+				$pqrsRegRecord->save();
+				$rad = $record->id_rad_asig;
+				return $this->redirect("pqrsasig", "" .$rad. " notificada con exito!!!");
+			} else {
+				return $this->redirect('error', 'no se pudo notificar!!!'); //retorno en la misma vista el mensaje de error
+				//return back()->with('error', 'No se pudo enviar el correo');
+			}
 		}
+		
 		return $this->renderView("pages.pqrsasig.edit", ["data" => $record, "rec_id" => $rec_id]);
 	}
-    /**
-     * After page record updated
-     * @param string $rec_id // updated record id
-     * @param array $record // updated page record
-     */
-    function afterEdit($rec_id,$record){
-        //conexion a datos base "Pqrsregpqrs" 
-		$queryreg = PqrsRegPqrs::query(); //se conecta a la tabla Pqrsregpqrs para poder llamar los campos
-        $recordreg = $queryreg->findOrFail($rec_id, Pqrsregpqrs::editFields()); //se obtienen y se almacenan los registros de la tabla
-        //conexion a datos base "PqrsAsig" 
-		$query_asig = PqrsAsig::query(); //se conecta a la tabla Pqrsregpqrs para poder llamar los campos
-        $recor_asig = $query_asig->findOrFail($rec_id, PqrsAsig::editFields()); //se obtienen y se almacenan los registros de la tabla
-		$photoreg = $recordreg->regsol_photo; // se toma la imagen del campo
-        $respo = $recordreg->id_asig_sol; // se toma el nombre del responsable
-        $radicado = $recordreg->rad_sol; // se toma el número del radicado
-        $correo =$recordreg->email_sol; // se toma el correo electrónico del subformulario
-        $noment = $recordreg->nom_ent_sol; // se toma el campo entidad
-        $nompet =$recordreg->nom_pet_sol; // se toma  el campo peticionario
-        $diaspen =$recordreg->diaspen_sol;  // se toma el campo dias pendientes
-        $fecresp=$recordreg->fecrep_sol; // se toma campo fecha respuesta
-        $fecsol    = $recordreg->fec_sol; // se toma campo fecha radicado
-		$ofic_act    = Auth()->user()->nom_ofic_user; // se toma el campo de la tabla user
-		$obser = $recor_asig->observacion;// se toma el campo de la tabla pqrsasig
-        Mail::to($correo)->send(new Mailpqrs($correo,$photoreg,$respo,$radicado,$noment,$fecresp,$nompet,$diaspen,$fecsol, $ofic_act, $obser)); // se ejecuta el envio del email con el controlador Mailpqrs 
-    }
 	
-
+	/**
+	 * After page record updated
+	 * @param string $rec_id // updated record id
+	 * @param array $record // updated page record
+	 */
+	function envioEmail($rec_id, $record){
+		// Conexión a la base de datos "Pqrsregpqrs"
+		$queryreg = PqrsRegPqrs::query();
+		$recordreg = $queryreg->findOrFail($rec_id, PqrsRegPqrs::editFields());
+		// Conexión a la base de datos "PqrsAsig"
+		$query_asig = PqrsAsig::query();
+		$recor_asig = $query_asig->findOrFail($rec_id, PqrsAsig::editFields());
+		$photoreg = $recordreg->regsol_photo;
+		$respo = $recordreg->id_asig_sol;
+		$radicado = $recordreg->rad_sol;
+		$correo = $recordreg->email_sol;
+		$noment = $recordreg->nom_ent_sol;
+		$nompet = $recordreg->nom_pet_sol;
+		$diaspen = $recordreg->diaspen_sol;
+		$fecresp = $recordreg->fecrep_sol;
+		$fecsol = $recordreg->fec_sol;
+		$ofic_act = Auth()->user()->nom_ofic_user;
+		$obs_asig = $recor_asig->observacion;// se toma el campo de la tabla pqrsasig
+		//$obs_reg = $obs_asig;
+		// Enviar el correo
+		try {
+			Mail::to($correo)->send(new Mailpqrs($correo, $photoreg, $respo, $radicado, $noment, $fecresp, $nompet, $diaspen, $fecsol, $ofic_act, $obs_asig));
+			return true; // Envío exitoso
+		} catch (\Exception $e) {
+			return false; // Envío fallido
+		}
+	}
+}	
+	
 	/**
      * Delete record from the database
 	 * Support multi delete by separating record id by comma.
@@ -141,6 +157,7 @@ class PqrsAsigController extends Controller
 		$query->whereIn("id_asig", $arr_id);
 		$query->delete();
 		$redirectUrl = $request->redirect ?? url()->previous();
-		return $this->redirect($redirectUrl, "Grabar eliminado con éxito");
+		return $this->redirect($redirectUrl, "eliminado con éxito");
 	}
-}
+
+	
