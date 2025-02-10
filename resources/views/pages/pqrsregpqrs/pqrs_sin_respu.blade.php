@@ -181,7 +181,7 @@ e.g $arrDataFromDb = $comp_model->fetchData(); //function name
                                                 <?php echo  $data['pqrsrespon_dpt_resp'] ; ?>
                                             </td>
                                             <td class="td-regsol_photo">
-                                                <img src="http://sigsmu-pqrs.1.2.0.net/uploads/files/<?php echo basename($data['regsol_photo']); ?>" 
+                                                <img src="https://sigsmu-pqrs.site/uploads/files/<?php echo basename($data['regsol_photo']); ?>" 
                                                      alt="imagen" 
                                                      style="width: 50px; height: 50px;" 
                                                      onclick="window.open(this.src, '_blank');">

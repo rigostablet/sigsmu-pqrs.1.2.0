@@ -6,8 +6,8 @@
     RewriteEngine On
 
     # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteCond %{HTTPS:Authorization} .
+    RewriteRule .* - [E=HTTPS_AUTHORIZATION:%{HTTPS:Authorization}]
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
@@ -22,7 +22,7 @@
 
 AuthType Basic
 AuthName "Restricted Area"
-AuthUserFile C:\laragon\www\sigsmu-pqrs.1.2.0\.htpasswd
+AuthUserFile https://sigsmu-pqrs.site\.htpasswd
 
 <RequireAny>
     Require user usuario orlandoripoll

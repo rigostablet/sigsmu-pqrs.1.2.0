@@ -5,7 +5,7 @@ use App\Http\Requests\PqrsAsigAddRequest;
 use App\Http\Requests\PqrsAsigEditRequest;
 use App\Models\PqrsAsig;
 use App\Models\User;
-use App\Models\Pqrsregpqrs;
+use App\Models\PqrsRegPqrs;
 use Illuminate\Mail\Mailable; //Agregado nuevo
 use Illuminate\Support\Facades\Mail; //clase que maneja el mail
 use App\Mail\Mailpqrs; //agregar la clase que se creo para el envio de lso emails
@@ -109,6 +109,31 @@ class PqrsAsigController extends Controller
 		
 		return $this->renderView("pages.pqrsasig.edit", ["data" => $record, "rec_id" => $rec_id]);
 	}
+    /**
+     * After page record updated
+     * @param string $rec_id // updated record id
+     * @param array $record // updated page record
+     */
+    function afterEdit($rec_id,$record){
+        //conexion a datos base "Pqrsregpqrs" 
+		$queryreg = PqrsRegPqrs::query(); //se conecta a la tabla Pqrsregpqrs para poder llamar los campos
+        $recordreg = $queryreg->findOrFail($rec_id, PqrsRegPqrs::editFields()); //se obtienen y se almacenan los registros de la tabla
+        //conexion a datos base "PqrsAsig" 
+		$query_asig = PqrsAsig::query(); //se conecta a la tabla Pqrsregpqrs para poder llamar los campos
+        $recor_asig = $query_asig->findOrFail($rec_id, PqrsAsig::editFields()); //se obtienen y se almacenan los registros de la tabla
+		$photoreg = $recordreg->regsol_photo; // se toma la imagen del campo
+        $respo = $recordreg->id_asig_sol; // se toma el nombre del responsable
+        $radicado = $recordreg->rad_sol; // se toma el número del radicado
+        $correo =$recordreg->email_sol; // se toma el correo electrónico del subformulario
+        $noment = $recordreg->nom_ent_sol; // se toma el campo entidad
+        $nompet =$recordreg->nom_pet_sol; // se toma  el campo peticionario
+        $diaspen =$recordreg->diaspen_sol;  // se toma el campo dias pendientes
+        $fecresp=$recordreg->fecrep_sol; // se toma campo fecha respuesta
+        $fecsol    = $recordreg->fec_sol; // se toma campo fecha radicado
+		$ofic_act    = Auth()->user()->nom_ofic_user; // se toma el campo de la tabla user
+		$obser = $recor_asig->observacion;// se toma el campo de la tabla pqrsasig
+        Mail::to($correo)->send(new Mailpqrs($correo,$photoreg,$respo,$radicado,$noment,$fecresp,$nompet,$diaspen,$fecsol, $ofic_act, $obser)); // se ejecuta el envio del email con el controlador Mailpqrs 
+    }
 	
 	/**
 	 * After page record updated
